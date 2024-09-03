@@ -74,7 +74,7 @@ jobs:
       RESOURCE_GROUP: NetCore_GIthubCI_CD_RG
     steps:
     - name: Download arm
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4.1.7
       with:
         name: arm_template
         path: arm_template
@@ -109,7 +109,7 @@ jobs:
     
     steps:      
     - name: Download scripts
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4.1.7
       with:
         name: sql_scripts
         path: sql_scripts
