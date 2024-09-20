@@ -20,13 +20,15 @@ jobs:
         run: |
           case '${{ github.event_name }}' in
             push)
+              echo "is push"
               firstCommit='${{ github.event.commits[0].id }}'
               lastCommit='${{ github.event.commits[-1].id }}'
               ;;
             pull_request)
+              echo "is pr"
               firstCommit='${{ github.event.base_ref }}'
               lastCommit='${{ github.event.head_ref }}'
               ;;
           esac
           echo "first commit ${firstCommit} last commit ${lastCommit}"
-          changedFiles=$(git diff --name-only --diff-filter=d "${firstCommit}~1" "${lastCommit}")
+          # changedFiles=$(git diff --name-only --diff-filter=d "${firstCommit}~1" "${lastCommit}")
