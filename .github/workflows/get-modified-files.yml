@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@master
         with:
           fetch-depth: 0
-
+      - uses: hmarr/debug-action@v3
       - name: Modified files
         run: |
           case '${{ github.event_name }}' in
