@@ -30,7 +30,7 @@ jobs:
             } else if (event === 'pull_request') {
               const prNumber = context.payload.pull_request.number;
               console.log(`PR: ${prNumber}`);
-              const { data: pullRequestFiles } = await github.pulls.listFiles({
+              const { data: pullRequestFiles } = await github.rest.pulls.listFiles({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 pull_number: prNumber,
