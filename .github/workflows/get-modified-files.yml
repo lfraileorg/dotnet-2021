@@ -29,6 +29,7 @@ jobs:
               files = pushPayload.commits.flatMap(commit => commit.modified);
             } else if (event === 'pull_request') {
               const prNumber = context.payload.pull_request.number;
+              console.log(`PR: ${prNumber}`);
               const { data: pullRequestFiles } = await github.pulls.listFiles({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
