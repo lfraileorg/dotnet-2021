@@ -12,23 +12,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@master
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v4
+          
       - uses: hmarr/debug-action@v3
-      - name: Modified files
-        run: |
-          case '${{ github.event_name }}' in
-            push)
-              echo "is push"
-              firstCommit='${{ github.event.commits[0].id }}'
-              lastCommit='${{ github.event.commits[-1].id }}'
-              ;;
-            pull_request)
-              echo "is pr"
-              firstCommit='${{ github.event.base_ref }}'
-              lastCommit='${{ github.event.head_ref }}'
-              ;;
-          esac
-          echo "first commit ${firstCommit} last commit ${lastCommit}"
-          # changedFiles=$(git diff --name-only --diff-filter=d "${firstCommit}~1" "${lastCommit}")
+      
+      - name: Get list of modified files
+        id: modified-files
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const event = context.eventName;
+            let files = [];
+            if (event === 'push') {
+              const pushPayload = context.payload;
+              files = pushPayload.commits.flatMap(commit => commit.modified);
+            } else if (event === 'pull_request') {
+              const prNumber = context.payload.pull_request.number;
+              const { data: pullRequestFiles } = await github.pulls.listFiles({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+              });
+              files = pullRequestFiles.map(file => file.filename);
+            }
+            return files;
+
+      - name: Output modified files
+        run: echo "Modified files: ${{ steps.modified-files.outputs.result }}"
