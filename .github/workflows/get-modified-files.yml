@@ -39,4 +39,5 @@ jobs:
             return files;
 
       - name: Output modified files
-        run: echo "Modified files: ${{ steps.modified-files.outputs.result }}"
+        run: |
+          echo "Modified files: ${{ steps.modified-files.outputs.result }}"
