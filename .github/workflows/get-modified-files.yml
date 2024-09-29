@@ -27,7 +27,7 @@ jobs:
             if (event === 'push') {
               const commits = context.payload.commits;
               for (const commit of commits) {
-                const { data: commitData } = await github.repos.getCommit({
+                const { data: commitData } = await github.rest.repos.getCommit({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   ref: commit.id,
