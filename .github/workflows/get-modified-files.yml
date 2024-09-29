@@ -25,9 +25,15 @@ jobs:
             const event = context.eventName;
             let files = [];
             if (event === 'push') {
-              const pushPayload = context.payload;
-              console.log(`modified files: ${JSON.stringify(pushPayload.commits)}`);
-              files = pushPayload.commits.flatMap(commit => commit.modified);
+              const commits = context.payload.commits;
+              for (const commit of commits) {
+                const { data: commitData } = await github.repos.getCommit({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: commit.id,
+                });
+                files.push(...commitData.files.map(file => file.filename));
+              }
             } else if (event === 'pull_request') {
               const prNumber = context.payload.pull_request.number;
               console.log(`PR: ${prNumber}`);
