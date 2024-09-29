@@ -26,7 +26,7 @@ jobs:
             let files = [];
             if (event === 'push') {
               const pushPayload = context.payload;
-              console.log(`modified files: ${JSON.Stringify(pushPayload.commits)}`);
+              console.log(`modified files: ${JSON.stringify(pushPayload.commits)}`);
               files = pushPayload.commits.flatMap(commit => commit.modified);
             } else if (event === 'pull_request') {
               const prNumber = context.payload.pull_request.number;
